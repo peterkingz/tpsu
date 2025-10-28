@@ -43,7 +43,7 @@ class SystemRUT:
             data={"temperature1": {"value":"not found", "unit":"not found"}}
             return json.dumps(data, indent=4, ensure_ascii=False)
 
-    def get_storage_usage(self, path="/tmp"):
+    def get_storage_usage(self, path="/"):
         stat = os.statvfs(path)
         total = stat.f_blocks * stat.f_frsize / (1024 * 1024)
         free = stat.f_bfree * stat.f_frsize / (1024 * 1024)

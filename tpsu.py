@@ -3,6 +3,7 @@ import time
 import os
 from bms import BMSBattery
 from adam import ADAM
+from zenoh import ZenohPub
 
 THREAD_SLEEP = 5
 
@@ -17,13 +18,13 @@ di = []
 do = []
 ai = []
 
-# --- comms task ---
+# comms task 
 def comms():
     while True:
         print("FAKE comms")
         time.sleep(THREAD_SLEEP)
 
-# --- monitor bms task  ---
+# monitor bms task
 def monitor_bms():
 
     while True:
@@ -33,7 +34,7 @@ def monitor_bms():
         print("FAKE BMS")
         time.sleep(THREAD_SLEEP)
 
-# --- states task ---
+# states task
 def state_machine():
 
     adam_ios = ADAM(ip=IP_GPIO, unit_id=UNIT_ID_GPIO)
@@ -60,11 +61,27 @@ def state_machine():
         print("FAKE ADAMs")
         time.sleep(THREAD_SLEEP)
 
-# --- Main ---
+
+# events task
+def events():
+    while True:
+        # Exemplo de uso
+
+        #if event changes then send pub message
+
+        pub = ZenohPub("topic/exemplo")
+        pub.send_message({"key": "value"})
+        pub.close()
+
+        print("FAKE events")
+        time.sleep(THREAD_SLEEP)
+
+# main
 if __name__ == "__main__":
     t1 = threading.Thread(target=comms, daemon=True)
     t2 = threading.Thread(target=monitor_bms, daemon=True)
     t3 = threading.Thread(target=state_machine, daemon=True)
+    t4 = threading.Thread(target=events, daemon=True)
 
     #t1.start()
     t2.start()
